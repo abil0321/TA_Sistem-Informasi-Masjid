@@ -1,6 +1,12 @@
 {
     "version": 2,
     "framework": null,
+    "builds": [
+        {
+            "src": "public/index.php",
+            "use": "@vercel/php"
+        }
+    ],
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.6.0" }
     },
@@ -12,6 +18,8 @@
     "buildCommand": "vite build",
     "outputDirectory": "public",
     "env": {
+        "PHP_VERSION": "8.1",
+        "LD_LIBRARY_PATH": "/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH",
         "APP_ENV": "local",
         "APP_DEBUG": "true",
         "APP_URL": "https://yourproductionurl.com",
