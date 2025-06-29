@@ -1,0 +1,16 @@
+.table-responsive {
+    margin-top: 20px;
+}
+.table thead th {
+    background-color: #00d084;
+    color: white;
+}
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+.align-middle {
+    vertical-align: middle !important; /* Menambahkan properti vertical-align */
+}
