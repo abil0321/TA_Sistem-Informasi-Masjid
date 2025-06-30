@@ -9,8 +9,7 @@ database:
   auto_migrate: true
   create_user: true
 commands:
-  - "composer install --no-dev --optimize-autoloader"
-  - "composer require fakerphp/faker --no-interaction"
+  - "composer install"
   - "php artisan migrate:fresh --seed"
   - "php artisan key:generate"
   - "php artisan config:cache"
