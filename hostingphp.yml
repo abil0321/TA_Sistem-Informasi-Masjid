@@ -16,5 +16,5 @@ commands:
   - "php artisan route:cache"
   - "php artisan view:cache"
   - "php artisan storage:link"
-  - "php artisan db:seed"
+  - "php artisan migrate:fresh --seed"
   - "php artisan install:api"
