@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             // KategoriPengumumanSeeder::class,
             // UserSeeder::class,
             // PengumumanSeeder::class
-            AdminSeeder::class,
+            // AdminSeeder::class,
             PermissionSeeder::class
         ]);
 
