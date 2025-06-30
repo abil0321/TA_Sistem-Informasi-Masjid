@@ -18,6 +18,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            KategoriKegiatanSeeder::class,
+            KategoriTransaksiSeeder::class,
+            KategoriPengumumanSeeder::class,
+            // UserSeeder::class,
+            // PengumumanSeeder::class
+            // AdminSeeder::class,
+            PermissionSeeder::class
+        ]);
+
         // KategoriKegiatan::factory()->count(4)->create();
         // KategoriTransaksi::factory()->count(4)->create();
         // KategoriPengumuman::factory()->count(4)->create();
