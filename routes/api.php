@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::apiResource('user_api', UserController::class);
     Route::get('/cek_token_api', [AuthController::class, 'cek_token']);
     Route::post('/logout_api', [AuthController::class, 'logout']);
-    Route::middleware('auth:sanctum', 'role:admin')->group(function () {
+    Route::middleware('auth:sanctum', 'role:Admin')->group(function () {
         Route::apiResource('user_api', UserController::class);
         Route::apiResource('role_api', UserController::class);
         Route::apiResource('permission_api', UserController::class);
