@@ -100,7 +100,7 @@
                 <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
                 <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
                 Designed By <a class="border-bottom text-white" target="_blank" href="https://htmlcodex.com">HTML Codex</a> Created
-                By <a class="border-bottom text-white" href="https://github.com/FranssMukti07" target="_blank">FranssMukti07 & abil0321</a>
+                By <a class="border-bottom text-white" href="https://github.com/FranssMukti07" target="_blank">FranssMukti07</a> and <a class="border-bottom text-white" href="https://github.com/abil0321" target="_blank">abil0321</a>
             </div>
         </div>
     </div>
