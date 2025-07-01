@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/donasi/konfirmasi-callback',[FormDonasiController::class, 'callback']);
+Route::post('/donasi/konfirmasi-callback', [FormDonasiController::class, 'callback']);
 
 Route::post('/login_api', [AuthController::class, 'login']);
 
@@ -36,9 +36,14 @@ Route::get('/transaksi_api', [TransaksiKeuanganController::class, 'index']);
 Route::get('/transaksi_api/{transaksi_api}', [TransaksiKeuanganController::class, 'show']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('user_api', UserController::class);
+    // Route::apiResource('user_api', UserController::class);
     Route::get('/cek_token_api', [AuthController::class, 'cek_token']);
     Route::post('/logout_api', [AuthController::class, 'logout']);
+    Route::middleware('auth:sanctum', 'role:admin')->group(function () {
+        Route::apiResource('user_api', UserController::class);
+        Route::apiResource('role_api', UserController::class);
+        Route::apiResource('permission_api', UserController::class);
+    });
 
     Route::apiResource('kegiatan_api', KegiatanController::class)->except(['index', 'show']);
     Route::apiResource('pengumuman_api', PengumumanController::class)->except(['index', 'show']);
@@ -48,6 +53,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('kategori_pengumuman_api', KategoriPengumumanController::class);
     Route::apiResource('kategori_kegiatan_api', KategoriKegiatanController::class);
     Route::apiResource('kategori_transaksi_api', KategoriTransaksiController::class);
-
 });
-
