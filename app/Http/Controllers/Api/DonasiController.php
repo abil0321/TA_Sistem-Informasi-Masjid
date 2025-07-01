@@ -28,11 +28,17 @@ class DonasiController extends Controller
     {
         $data = $request->all();
 
+        // Set default value jika status tidak ada atau kosong
+        if (!isset($data['status']) || empty($data['status'])) {
+            $data['status'] = 'pending'; // atau nilai default lainnya
+        }
+
         $validator = Validator::make($data, [
             'nama_donatur' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:0',
             'email' => 'required|string',
             'no_telp' => 'required|string',
+            'status' => 'required|string',
         ]);
 
         if ($validator->fails()) {
