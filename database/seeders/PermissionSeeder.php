@@ -19,9 +19,6 @@ class PermissionSeeder extends Seeder
 
         // Create permissions
         $permissions = [
-            'edit-settings',
-            'view-transactions',
-
             // User management
             'user.view',
             'user.create',
