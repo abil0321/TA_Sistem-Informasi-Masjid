@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class Kegiatan extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasFactory;
 
     protected $table = 'kegiatan';
 
@@ -20,12 +17,14 @@ class Kegiatan extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'lokasi',
+        'foto',
         'jumlah',
         'kategori_kegiatan_id',
         'user_id',
     ];
 
     protected $casts = [
+        'foto' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

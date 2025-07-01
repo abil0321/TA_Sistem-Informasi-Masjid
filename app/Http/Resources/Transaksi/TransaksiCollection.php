@@ -18,7 +18,6 @@ class TransaksiCollection extends ResourceCollection
             'data' => TransaksiResource::collection($this->collection),
             'meta' => [
                 'total' => $this->collection->count(),
-                // 'total-saldo' => $this->collection->sum('saldo'),
             ],
         ];
     }

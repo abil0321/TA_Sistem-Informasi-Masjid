@@ -54,15 +54,26 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nama')
                     ->required()
+                    // ->unique()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    // ->unique()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
-                    ->maxLength(255),
+                    ->confirmed()
+                    ->revealable()
+                    ->minLength(8),
+                    Forms\Components\TextInput::make('password_confirmation')
+                    ->label('Konfirmasi Password')
+                    ->password()
+                    ->required()
+                    ->same('password')
+                    ->revealable()
+                    ->minLength(8),
                 Forms\Components\TextInput::make('no_telp')
                     ->tel()
                     ->label('Nomor Telepon')

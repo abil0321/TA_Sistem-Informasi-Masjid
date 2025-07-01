@@ -16,11 +16,11 @@ class DonasiResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'nama_donatur' => $this->nama_donatur,
             'email' => $this->email,
             'no_telp' => $this->no_telp,
             'jumlah' => $this->jumlah,
+            'tanggal' => $this->created_at->format('d M Y'),
             'user_id' => new UserResource($this->user),
         ];
     }

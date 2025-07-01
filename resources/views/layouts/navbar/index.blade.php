@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
     <a href="" class="navbar-brand p-0">
-        <h1 class="text-primary"><i class="fas fa-search-dollar me-3"></i>Stocker</h1>
-        <!-- <img src="img/logo.png" alt="Logo"> -->
+        {{-- <h1 class="text-primary"><i class="fas fa-search-dollar me-3"></i>Stocker</h1> --}}
+        <img src="{{asset('assets/img/logo-masjid-2.png')}}" alt="Logo">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="fa fa-bars"></span>
@@ -14,24 +14,22 @@
                 class="nav-item nav-link {{ $page_meta['page'] == 'Tentang' ? 'active' : '' }}">Tentang</a>
             <a href="{{ route('galeri') }}"
                 class="nav-item nav-link {{ $page_meta['page'] == 'Galeri' ? 'active' : '' }}">Galeri</a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link {{ $page_meta['page'] == 'Laporan' ? 'active' : '' }}"
+                    data-bs-toggle="dropdown">
+                    <span class="dropdown-toggle">Laporan</span>
+                </a>
+                <div class="dropdown-menu m-0">
+                    <a href="{{ route('transaksi-keuangan') }}" class="dropdown-item">Transaksi Keuangan</a>
+                    <a href="{{ route('pemasukan') }}" class="dropdown-item">Pemasukan</a>
+                    <a href="{{ route('pengeluaran') }}" class="dropdown-item">Pengeluaran</a>
+                </div>
+            </div>
             <a href="{{ route('pengumuman') }}"
                 class="nav-item nav-link {{ $page_meta['page'] == 'Pengumuman' ? 'active' : '' }}">Pengumuman</a>
             <a href="{{ route('kontak') }}"
                 class="nav-item nav-link {{ $page_meta['page'] == 'Kontak' ? 'active' : '' }}">Kontak</a>
-            {{-- <div class="nav-item dropdown">
-                <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                    <span class="dropdown-toggle">Pages</span>
-                </a>
-                <div class="dropdown-menu m-0">
-                    <a href="#" class="dropdown-item">Our Features</a>
-                    <a href="#" class="dropdown-item">Our team</a>
-                    <a href="#" class="dropdown-item">Testimonial</a>
-                    <a href="#" class="dropdown-item">Our offer</a>
-                    <a href="#" class="dropdown-item">FAQs</a>
-                    <a href="#" class="dropdown-item">404 Page</a>
-                </div>
-            </div> --}}
         </div>
-        <a href="#" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0">Get Started</a>
+        <a href="{{route('form-donasi')}}" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0">Infaq Now!</a>
     </div>
 </nav>

@@ -4,6 +4,9 @@
 <meta content="" name="keywords">
 <meta content="" name="description">
 
+<!-- Favicon -->
+<link href={{ asset('assets/img/logo.png') }} rel="icon">
+
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,4 +31,7 @@
 <link href={{ asset('assets/css/style.css') }} rel="stylesheet">
 <link href={{ asset('assets/css/tabel-dkm.css') }} rel="stylesheet">
 
-
+<!-- CDN Midtrans -->
+<script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="{{config('midtrans.client_key')}}"></script>

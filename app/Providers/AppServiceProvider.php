@@ -7,7 +7,6 @@ use App\Models\Kegiatan;
 use App\Observers\DonasiObserver;
 use App\Observers\KegiatanObserver;
 use App\Observers\TransaksiObserver;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,8 +26,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Donasi::observe(DonasiObserver::class);
         Kegiatan::observe(KegiatanObserver::class);
-        if (config('app.env') !== 'local') {
-            URL::forceScheme('https');
-        }
     }
 }

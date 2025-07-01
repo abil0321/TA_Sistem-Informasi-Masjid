@@ -22,7 +22,7 @@ class PengumumanFactory extends Factory
         'kategori_pengumuman_id'=> rand(1, 4),
         'referensi'=> $this->faker->paragraph(1),
         'tanggal'=> $this->faker->dateTimeBetween('-1 year', 'now'),
-        'user_id'=> rand(123, 124),
+        'user_id'=> rand(1, 10),
         ];
     }
 }

@@ -2,18 +2,11 @@
 @extends('layouts.app')
 
 @section('content')
-
     <!-- Blog Start -->
     <div class="container-fluid blog py-5">
         <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 class="text-primary">{{ $page_meta['header'] }}</h4>
-                <h1 class="display-5 mb-4">{{ $page_meta['header'] }}</h1>
-                <p class="mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis
-                    cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint
-                    dolorem autem obcaecati, ipsam mollitia hic.
-                </p>
-            </div>
+            {{-- <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            </div> --}}
             <div class="container pb-5">
                 <div id="loading" class="text-center d-none">
                     Loading...
@@ -29,9 +22,9 @@
                     <button class="btn btn-primary" onclick="nextPage()" id="nextBtn">Next</button>
                 </div>
             </div>
-            <div class="owl-carousel blog-carousel wow fadeInUp" data-wow-delay="0.2s">
+            {{-- <div class="owl-carousel blog-carousel wow fadeInUp" data-wow-delay="0.2s">
                 <!-- Contoh blog item -->
-            </div>
+            </div> --}}
         </div>
     </div>
     <!-- Blog End -->
@@ -53,42 +46,56 @@
 
             const url = `http://127.0.0.1:8000/api/pengumuman_api?page=${page}&per_page=${perPage}`;
 
+            console.log("Fetching data from: ", url); // Cek apakah URL benar
+
+
             fetch(url)
                 .then(response => {
+                    console.log("Fetch Response:", response);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
+                    console.log("API Data Received:", data);
                     loadingElement.classList.add('d-none');
                     currentPage = page;
                     document.getElementById('currentPage').textContent = currentPage;
 
-                    const html = data.data.map(item => `
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="/pengumuman/${item.id}" class="text-decoration-none">${item.judul}</a>
-                                </h5>
-                                <p class="card-text">${item.isi.substring(0, 100)}...</p>
-                                <div class="text-muted">
-                                    <small>
-                                        Posted by: ${item.user.name} |
-                                        Kategor Pengumuman: ${item.kategori_pengumuman_id.nama} |
-                                        Date: ${new Date(item.tanggal).toLocaleDateString()}
-                                    </small>
+                    const html = data.data.map(item => {
+                        // Menghapus tag <img> dan elemen gambar lainnya dari isi pengumuman
+                        let isiText = item.isi.replace(/<img[^>]*>/g, '');
+                        let isiText2 = isiText.replace(/<figcaption.*?<\/figcaption>/, '');
+                        let text = isiText2.replace(/<[^>]*>/g, '').substring(0, 250);
+
+                        return `
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="/pengumuman/${item.id}" class="text-decoration-none">${item.judul}</a>
+                                    </h5>
+                                    <p class="card-text">${text}...</p>
+                                    <div class="text-muted">
+                                        <small>
+                                            Posted by: ${item.user.name} |
+                                            Kategori Pengumuman: ${item.kategoriPengumuman.nama || 'undefined'} |
+                                            Date: ${new Date(item.tanggal).toLocaleDateString()}
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
+
 
                     pengumumanList.innerHTML = html;
 
                     const prevBtn = document.getElementById('previousBtn');
                     const nextBtn = document.getElementById('nextBtn');
                     prevBtn.disabled = page === 1;
-                    nextBtn.disabled = !data.links.next;
+                    nextBtn
+                        .disabled = !data.links.next;
                 })
                 .catch(error => {
                     loadingElement.classList.add('d-none');

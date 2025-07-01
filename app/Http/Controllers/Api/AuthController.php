@@ -14,6 +14,7 @@ class AuthController extends Controller
     {
         //TODO: cek yang memiliki token siapa aja
         return request()->user();
+
     }
     public function login(Request $request)
     {
@@ -39,6 +40,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Deleted Api Token was succesfully']);
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }

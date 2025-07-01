@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TransaksiKeuanganResource\Pages;
 use App\Filament\Resources\TransaksiKeuanganResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListTransaksiKeuangans extends ListRecords
 {
@@ -13,7 +14,8 @@ class ListTransaksiKeuangans extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn() => Auth::user()->can('edit-settings', static::$resource)),
         ];
     }
 }

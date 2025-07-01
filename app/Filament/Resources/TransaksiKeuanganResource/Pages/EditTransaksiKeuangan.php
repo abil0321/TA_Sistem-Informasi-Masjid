@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TransaksiKeuanganResource\Pages;
 use App\Filament\Resources\TransaksiKeuanganResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditTransaksiKeuangan extends EditRecord
 {
@@ -13,7 +14,8 @@ class EditTransaksiKeuangan extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn() => Auth::user()->can('edit-settings', static::$resource)),
         ];
     }
 }

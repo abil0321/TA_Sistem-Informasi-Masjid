@@ -13,13 +13,19 @@ Route::get('/tentang', action: [Controllers\TentangController::class, 'index'])-
 
 Route::get('/galeri', action: [Controllers\GaleriController::class, 'index'])->name('galeri');
 
+Route::get('/laporan/transaksi-keuangan', action: [Controllers\LaporanController::class, 'transaksi_keuangan'])->name('transaksi-keuangan');
+Route::get('/laporan/pemasukan', action: [Controllers\LaporanController::class, 'pemasukan'])->name('pemasukan');
+Route::get('/laporan/pengeluaran', action: [Controllers\LaporanController::class, 'pengeluaran'])->name('pengeluaran');
+
 Route::get('/pengumuman', action: [Controllers\PengumumanController::class, 'index'])->name('pengumuman');
 Route::get('/pengumuman/{id}', [Controllers\PengumumanController::class, 'show'])->name('pengumuman.detail');
 
-// Route::get('/blog/{id}', [Controllers\BlogController::class, 'show']);
-
-// Route::get('/blog/test_api', action: [Controllers\BlogController::class, 'test']);
 Route::get('/kontak', action: [Controllers\KontakController::class, 'index'])->name('kontak');
+
+Route::get('/donasi', action: [Controllers\FormDonasiController::class, 'index'])->name('form-donasi');
+Route::post('/donasi/konfirmasi', [Controllers\FormDonasiController::class, 'konfirmasi'])->name('konfirmasi');
+Route::post('/donasi/konfirmasi-callback', [Controllers\FormDonasiController::class, 'callback'])->name('callback');
+Route::get('/donasi/invoice/{id}', [Controllers\FormDonasiController::class, 'invoice'])->name('invoice');
 
 // 🔹 Middleware Auth untuk mengatur akses berdasarkan role
 // Route::middleware(['auth'])->group(function () {

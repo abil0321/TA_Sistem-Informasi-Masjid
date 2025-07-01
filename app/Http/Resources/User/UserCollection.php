@@ -18,7 +18,7 @@ class UserCollection extends ResourceCollection
             'data' => UserResource::collection($this->collection),
             'meta' => [
                 'total' => $this->collection->count(),
-                // 'total_donasi' => $this->collection->sum('jumlah')
+                'total_donasi' => $this->collection->sum('jumlah')
             ],
         ];
     }

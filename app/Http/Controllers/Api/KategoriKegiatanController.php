@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\KategoriKegiatan\KategoriKegiatanCollection;
 use App\Models\KategoriKegiatan;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -17,7 +16,11 @@ class KategoriKegiatanController extends Controller
     public function index()
     {
         $data = KategoriKegiatan::all();
-        return new KategoriKegiatanCollection($data);
+        return response()->json([
+            'message' => 'Data Kategori Kegiatan',
+            'data' => $data,
+            'jummlah' => $data->count()
+        ], 200);
     }
 
     /**

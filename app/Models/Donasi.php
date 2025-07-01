@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class Donasi extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
     protected $table = 'donasi';
 
@@ -20,6 +19,7 @@ class Donasi extends Model
         'email',
         'no_telp',
         'jumlah',
+        'status',
         'user_id',
     ];
 

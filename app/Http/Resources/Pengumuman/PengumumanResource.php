@@ -20,7 +20,7 @@ class PengumumanResource extends JsonResource
             'id' => $this->id,
             'judul' => $this->judul,
             'isi' => $this->isi,
-            'kategori_pengumuman_id' => new KategoriPengumumanResource($this->kategoriPengumuman),
+            'kategoriPengumuman' => new KategoriPengumumanResource($this->kategoriPengumuman),
             'referensi' => $this->referensi,
             'tanggal' => $this->tanggal,
             'created_at' => $this->created_at,

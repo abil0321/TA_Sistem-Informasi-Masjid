@@ -6,18 +6,26 @@ use App\Filament\Resources\TransaksiKeuanganResource\Pages;
 use App\Filament\Resources\TransaksiKeuanganResource\RelationManagers;
 use App\Models\TransaksiKeuangan;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class TransaksiKeuanganResource extends Resource
 {
     protected static ?string $model = TransaksiKeuangan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
+
+    protected static ?string $pluralModelLabel = 'Transaksi Keuangan';
 
     public static function form(Form $form): Form
     {
@@ -50,37 +58,32 @@ class TransaksiKeuanganResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('saldo')
-                    ->numeric(null, 0, '.')
-                    ->prefix('Rp. ')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('jumlah')
-                    ->label('Jumlah')
-                    ->formatStateUsing(
-                        fn(TransaksiKeuangan $record) =>
-                        $record->kategoriTransaksi->nama == "Pemasukan"
-                            ? $record->donasi->jumlah ?? '-'  // Jika "Pemasukan", ambil dari donasi
-                            : $record->kegiatan->jumlah ?? '-' // Jika bukan, ambil dari kegiatan
-                    )
-                    ->numeric(null, 0, '.') // Format angka dengan ribuan separator
+                Tables\Columns\TextColumn::make('saldo')
+                    ->numeric(0, '.')
+                    ->prefix('Rp ')
                     ->sortable(),
-                // Tables\Columns\TextColumn::make(fn (TransaksiKeuangan $record) => $record->kategoriTransaksi->nama == "Pemasukan" ? "Donasi.jumlah" : "Kegiatan.jumlah")
-                //     ->numeric(null, 0, '.')
-                //     ->sortable(),
                 Tables\Columns\TextColumn::make('kategoriTransaksi.nama')
                     ->label('Kategori Transaksi')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.name')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('keterangan')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('kegiatan_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('kegiatan.jumlah')
+                    ->label('Jumlah Pengeluaran')
+                    ->default('0')
+                    ->numeric(0, '.')
+                    ->prefix('Rp ')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('donasi_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('donasi.jumlah')
+                    ->label('Jumlah Pemasukan')
+                    ->default('0')
+                    ->numeric(0, '.')
+                    ->prefix('Rp ')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -91,16 +94,34 @@ class TransaksiKeuanganResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                // QueryBuilder::make()
+                //     ->constraints([
+                //         DateConstraint::make('created_at')
+                //     ]),
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('from')->label('Dari Tanggal'),
+                        DatePicker::make('to')->label('Sampai Tanggal'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'], fn($q) => $q->where('tanggal', '>=', $data['from']))
+                            ->when($data['to'], fn($q) => $q->where('tanggal', '<=', $data['to']));
+                    }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn() => Auth::user()->can('edit-settings')),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn() => Auth::user()->can('edit-settings')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

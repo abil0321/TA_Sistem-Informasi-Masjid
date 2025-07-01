@@ -378,7 +378,6 @@
 .bg-breadcrumb {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../img/carousel-1.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -479,6 +478,12 @@
     color: var(--bs-white);
 }
 /*** Offer End ***/
+
+/* Pengumuman */
+.detail-pengumuman, img {
+    max-width: 100%;
+}
+
 
 /*** Blog Start ***/
 .blog .blog-item {

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Donasi;
 use App\Models\KategoriTransaksi;
 use App\Models\TransaksiKeuangan;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +17,7 @@ class DonasiObserver
             try {
                 // Membuat record baru di tabel transaksi untuk setiap donasi
                 TransaksiKeuangan::create([
-                    'saldo' => $this->calculateNewBalance(0, $donasi->jumlah, KategoriTransaksi::PEMASUKAN),
+                    'saldo' => $this->calculateNewBalance(0, $donasi->jumlah),
                     'tanggal' => now('Asia/Jakarta'),
                     'keterangan' => "Donasi dari {$donasi->nama_donatur}",
                     'kategori_transaksi_id' => KategoriTransaksi::PEMASUKAN, // Kategori pemasukan (1)
@@ -46,12 +47,15 @@ class DonasiObserver
 
                 if ($transaksi) {
                     // Simpan jumlah donasi lama sebelum menghapus transaksi
+                    // $oldAmount = $donasi->getOriginal('jumlah');
                     $oldAmount = $donasi->getOriginal('jumlah');
                     $currentBalance = $this->getLastBalance();
 
                     // Kembalikan saldo ke kondisi sebelum transaksi ini ada
                     $updatedBalance = $currentBalance - $oldAmount;
 
+                    // Menghapus transaksi lama
+                    $transaksi->delete();
 
                     Log::info('Transaksi donasi lama berhasil dihapus', [
                         'donasi_id' => $donasi->id,
@@ -60,11 +64,10 @@ class DonasiObserver
                         'nama_donatur' => $donasi->nama_donatur
                     ]);
 
-                    // Menghapus transaksi lama
-                    $transaksi->delete();
                     // Membuat transaksi baru dengan jumlah yang diperbarui
                     // Kurangi jumlah lama dan tambahkan jumlah baru
                     TransaksiKeuangan::create([
+                        // 'saldo' => $this->calculateNewBalance($oldAmount, $donasi->jumlah),
                         'saldo' => $updatedBalance + $donasi->jumlah,
                         'tanggal' => now('Asia/Jakarta'),
                         'keterangan' => "Perubahan donasi dari {$donasi->nama_donatur}",
@@ -91,22 +94,37 @@ class DonasiObserver
     {
         DB::transaction(function () use ($donasi) {
             try {
+                // $currentBalance = $this->getLastBalance();
+
+                // // Cek apakah saldo cukup untuk menghapus donasi
+                // if ($currentBalance < $donasi->jumlah) {
+                //     // Tampilkan notifikasi Filament
+                //     Notification::make()
+                //         ->title('Penghapusan Gagal')
+                //         ->body("Saldo tidak mencukupi untuk menghapus donasi sebesar Rp " . number_format($donasi->jumlah, 0, ',', '.'))
+                //         ->danger()
+                //         ->send();
+
+                //     return false; // Hentikan proses penghapusan
+                // }
+                
                 // Mendapatkan transaksi yang terkait dengan donasi ini
                 $transaksi = TransaksiKeuangan::where('donasi_id', $donasi->id)->first();
 
                 if ($transaksi) {
 
+                    // $oldAmount = $donasi->getOriginal('jumlah');
                     $oldAmount = $donasi->getOriginal('jumlah');
                     $currentBalance = $this->getLastBalance();
 
                     // Kembalikan saldo ke kondisi sebelum transaksi ini ada
                     $updatedBalance = $currentBalance - $oldAmount;
-
                     // Menghapus transaksi yang terkait dengan donasi ini
                     $transaksi->delete();
 
                     // Buat transaksi baru untuk mengurangi saldo
                     TransaksiKeuangan::create([
+                        // 'saldo' => $this->calculateNewBalance($oldAmount, newAmount: 0),
                         'saldo' => $updatedBalance,
                         'tanggal' => now('Asia/Jakarta'),
                         'keterangan' => "Pembatalan donasi dari {$donasi->nama_donatur}",
@@ -133,13 +151,19 @@ class DonasiObserver
 
     /**
      * Calculate the new balance by considering the old and new donation amounts
-     *
+     * 
      * @param int $oldAmount The old donation amount (0 for new donations)
      * @param int $newAmount The new donation amount
      * @return int The new balance
      */
 
+    // private function deleter(int $oldAmount)
+    // {
+    //     $lastTransaction = TransaksiKeuangan::latest()->first();
+    //     $currentBalance = $lastTransaction ? $lastTransaction->saldo : 0;
 
+    //     return $currentBalance - $oldAmount;
+    // }
 
     public function getLastBalance(): int
     {
@@ -147,15 +171,14 @@ class DonasiObserver
         return $lastTransaction ? $lastTransaction->saldo : 0;
     }
 
-    private function calculateNewBalance(int $oldAmount, int $newAmount, int $kategori): int
+    private function calculateNewBalance(int $oldAmount, int $newAmount): int
     {
         $lastTransaction = TransaksiKeuangan::latest()->first();
         $currentBalance = $lastTransaction ? $lastTransaction->saldo : 0;
 
-        if ($kategori === KategoriTransaksi::PEMASUKAN) {
-            return $currentBalance + $oldAmount + $newAmount;
-        } else {
-            return $currentBalance - $newAmount;
-        }
+        // For updates, subtract the old amount and add the new amount
+        // For new donations, oldAmount will be 0
+        // For deletions, newAmount will be 0
+        return $currentBalance - $oldAmount + $newAmount;
     }
 }

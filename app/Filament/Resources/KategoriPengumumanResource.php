@@ -20,12 +20,15 @@ class KategoriPengumumanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
+    protected static ?string $pluralModelLabel = 'Kategori Pengumuman';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required()
+                    ->columnSpanFull()
                     ->maxLength(255),
             ]);
     }

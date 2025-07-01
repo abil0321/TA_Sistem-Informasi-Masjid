@@ -13,19 +13,10 @@ class KontakController extends Controller
         return view('pages.kontak.index', [
             'page_meta' => [
                 'page' => 'Kontak',
-                'header' => 'Kontak Masjid'
+                'header' => 'Kontak Masjid',
+                'foto' => 'assets/img/masjid-9.jpg',
             ]
         ]);
     }
 
-    public function show($id)
-    {
-        return view('pages.blog.show', [
-            'page_meta' => [
-                'page' => 'Blog Detail',
-                'header' => 'Detail Pengumuman'
-            ],
-            'pengumuman_api' => $id
-        ]);
-    }
 }

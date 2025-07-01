@@ -18,9 +18,9 @@ class PengumumanController extends Controller
     public function index()
     {
         $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
-        $data = Pengumuman::with(['user'])
-                    ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
-                    ->paginate($perPage);
+        $data = Pengumuman::with(['kategoriPengumuman', 'user'])
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+            ->paginate($perPage);
         return new PengumumanCollection($data);
     }
 
@@ -55,7 +55,7 @@ class PengumumanController extends Controller
      */
     public function show(string $id)
     {
-        $data = Pengumuman::with('user')->find($id);
+        $data = Pengumuman::find($id);
 
         if (is_null($data)) {
             return response([

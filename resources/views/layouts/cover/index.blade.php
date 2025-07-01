@@ -2,7 +2,7 @@
     <!-- Carousel Start -->
     <div class="header-carousel owl-carousel">
         <div class="header-carousel-item">
-            <img src="{{ asset('assets/img/carousel-2.jpg') }}" class="img-fluid w-100" alt="Image">
+            <img src="{{ asset('assets/img/masjid-3.jpg') }}" class="img-fluid w-100" alt="Image">
             <div class="carousel-caption">
                 <div class="container">
                     <div class="row g-5">
@@ -29,7 +29,8 @@
     </div>
     <!-- Carousel End -->
 @else
-    <div class="container-fluid bg-breadcrumb">
+    <div class="container-fluid bg-breadcrumb"
+        style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url({{ asset($page_meta['foto']) }});position: relative;overflow: hidden;background-position: center center;background-repeat: no-repeat;background-size: cover;padding: 140px 0 60px 0;transition: 0.5s;">
         <div class="container text-center py-5" style="max-width: 900px;">
             <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">{{ $page_meta['header'] }}</h4>
             <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">

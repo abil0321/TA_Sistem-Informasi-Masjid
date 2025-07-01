@@ -17,7 +17,6 @@ use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
-use Filament\Panel\Concerns\HasAuth;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
@@ -34,11 +33,11 @@ use App\Filament\Resources\UserResource;
 use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
-use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\PengumumanResource;
-use App\Http\Resources\Pengumuman\PengumumanResource as PengumumanPengumumanResource;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use App\Filament\Widgets\TotalOverview;
+use App\Filament\Widgets\KeuanganOverview;
+use App\Filament\Widgets\SaldoChart;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -48,9 +47,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            // ->brand(fn() => View::make(''))
             ->brandName(fn() => View::make('filament.pages.brand'))
-            // ->brandView('filament.components.brand')
+            // ->brandLogo('/assets/img/logo.png')
             ->login(LoginCustom::class)
             ->userMenuItems([
                 MenuItem::make()
@@ -67,10 +65,13 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                TotalOverview::class,
+                KeuanganOverview::class,
+                SaldoChart::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -93,8 +94,6 @@ class AdminPanelProvider extends PanelProvider
                         ->items([
                             NavigationItem::make('Dashboard')
                                 ->icon('heroicon-o-home')
-                                // ->activeRule('admin')
-                                // ->label('Dashboard')
                                 ->isActiveWhen(fn() => request()->routeIs('filament.admin.pages.dashboard'))
                                 ->url(fn() => Dashboard::getUrl()),
                         ]),
@@ -110,8 +109,6 @@ class AdminPanelProvider extends PanelProvider
                             ...DonasiResource::getNavigationItems(),
                             ...KegiatanResource::getNavigationItems(),
                             ...TransaksiKeuanganResource::getNavigationItems(),
-                            // ...KategoriPengumumanResource::getNavigationItems(),
-                            // ...KategoriTransaksiResource::getNavigationItems(),
                         ]),
                     NavigationGroup::make('Settings')
                         ->items([

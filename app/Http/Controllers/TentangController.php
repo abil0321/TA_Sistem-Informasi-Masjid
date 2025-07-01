@@ -12,6 +12,7 @@ class TentangController extends Controller
             'page_meta' => [
                 'page' => 'Tentang',
                 'header' => 'Tentang Masjid',
+                'foto' => 'assets/img/masjid-2.jpg',
             ],
         ]);
     }

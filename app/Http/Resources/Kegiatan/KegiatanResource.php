@@ -17,13 +17,13 @@ class KegiatanResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'nama_kegiatan' => $this->nama_kegiatan,
             'deskripsi' => $this->deskripsi,
             'tanggal_mulai' => $this->tanggal_mulai,
             'tanggal_selesai' => $this->tanggal_selesai,
             'lokasi' => $this->lokasi,
             'jumlah' => $this->jumlah,
+            'foto' => $this->foto,
             'kategori_kegiatan_id' => new KategoriKegiatanResource($this->kategoriKegiatan),
             'user_id' => new UserResource($this->user),
         ];

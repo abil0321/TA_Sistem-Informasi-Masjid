@@ -2,15 +2,14 @@
 @extends('layouts.app')
 
 @section('content')
-
     <!-- Blog Detail Start -->
-    <div class="container-fluid blog py-5">
-        <div class="container py-5">
+    <div class="container-fluid blog py-4">
+        <div class="container">
             <div class="text-center mx-auto pb-4 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                 {{-- <h4 class="text-primary">Detail Pengumuman</h4> --}}
-                <h1 class="display-5 mb-5" id="pengumuman-judul">Loading...</h1>
+                <h1 class="display-5" id="pengumuman-judul">Loading...</h1>
             </div>
-            <div class="container pb-5">
+            <div class="container">
                 <div id="loading" class="text-center d-none">
                     Loading...
                 </div>
@@ -19,7 +18,7 @@
                 <div id="pengumuman-detail">
                     <!-- Data akan ditampilkan disini -->
                 </div>
-                <a href="{{ route('pengumuman') }}" class="btn btn-danger">Kembali</a>
+                <a href="{{ route('pengumuman') }}" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
     </div>
@@ -28,7 +27,7 @@
     <!-- Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const id = {{ $id }};
+            const id = {{ $data->id }};
             fetchData(id);
         });
 
@@ -52,7 +51,7 @@
                     loadingElement.classList.add('d-none');
 
                     // Periksa apakah data ada dan memiliki field yang dibutuhkan
-                    if (!data || !data.data || !data.data.user || !data.data.kategori_pengumuman_id) {
+                    if (!data || !data.data || !data.data.user || !data.data.kategoriPengumuman) {
                         throw new Error('Data tidak lengkap');
                     }
 
@@ -64,11 +63,11 @@
                     const html = `
                         <div class="card mb-3">
                             <div class="card-body">
-                                <p class="card-text">${pengumuman.isi}</p>
+                                <p class="card-text">${pengumuman.isi.replace(/<figcaption.*?<\/figcaption>/, '')}</p>
                                 <div class="text-muted">
                                     <small>
                                         Posted by: ${pengumuman.user.name} |
-                                        Kategori Pengumuman: ${pengumuman.kategori_pengumuman_id.nama} |
+                                        Kategori Pengumuman: ${pengumuman.kategoriPengumuman.nama} |
                                         Date: ${new Date(pengumuman.tanggal).toLocaleDateString()}
                                     </small>
                                 </div>

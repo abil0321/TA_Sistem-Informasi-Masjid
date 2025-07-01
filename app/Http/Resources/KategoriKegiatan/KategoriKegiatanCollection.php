@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\KategoriKegiatan;
 
+use App\Http\Resources\KategoriKegiatan\KategoriKegiatanResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

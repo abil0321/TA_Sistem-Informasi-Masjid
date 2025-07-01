@@ -8,13 +8,20 @@ use App\Models\KategoriPengumuman;
 use App\Models\Pengumuman;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class PengumumanResource extends Resource
 {
@@ -22,35 +29,66 @@ class PengumumanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
+    protected static ?string $pluralModelLabel = 'Pengumuman';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('judul')
-                    ->required()
-                    ->columnSpanFull()
-                    ->maxLength(255),
-                Forms\Components\RichEditor::make('isi')
-                    ->label('Isi Pengumuman')
-                    ->required()
+                Wizard::make([
+                    Wizard\Step::make('Detail')
+                        ->schema([
+                            Forms\Components\TextInput::make('judul')
+                                ->required()
+                                ->columnSpanFull()
+                                ->maxLength(255),
+                            Forms\Components\Select::make('kategori_pengumuman_id')
+                                ->label('Kategori')
+                                ->relationship('kategoriPengumuman', 'nama')
+                                ->options(KategoriPengumuman::all()->pluck('nama', 'id'))
+                                ->required(),
+                            Forms\Components\DateTimePicker::make('tanggal')
+                                ->default(date('d M Y'))
+                                ->required(),
+                            Forms\Components\TextInput::make('referensi')
+                                ->maxLength(255)
+                                ->default(null),
+                            Forms\Components\Select::make('user_id')
+                                ->label('User')
+                                ->disabled()
+                                ->relationship('user', 'name')
+                                ->options(User::all()->pluck('name', 'id'))
+                                ->default(Auth::user()->id)
+                                ->required(),
+                        ]),
+                    Wizard\Step::make('Deskripsi')
+                        ->schema([
+                            Forms\Components\RichEditor::make('isi')
+                                ->label('Isi Pengumuman')
+                                ->columns(5)
+                                ->required()
+                                ->toolbarButtons([
+                                    'bold',
+                                    'italic',
+                                    'underline',
+                                    'strike',
+                                    'link',
+                                    'h1',
+                                    'h2',
+                                    'h3',
+                                    'blockquote',
+                                    'codeBlock',
+                                    'bulletList',
+                                    'orderedList',
+                                    'attachFiles',
+                                    'undo',
+                                    'redo',
+                                ])
+                                ->fileAttachmentsDirectory(directory: 'pengumuman')
+                                ->columnSpanFull(),
+                        ]),
+                ])
                     ->columnSpanFull(),
-                Forms\Components\Select::make('kategori_pengumuman_id')
-                    ->label('Kategori')
-                    ->relationship('kategoriPengumuman', 'nama')
-                    ->options(KategoriPengumuman::all()->pluck('nama', 'id'))
-                    ->required(),
-                Forms\Components\TextInput::make('referensi')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\DateTimePicker::make('tanggal')
-                    ->required(),
-                Forms\Components\Select::make('user_id')
-                    ->label('User')
-                    ->disabled()
-                    ->relationship('user', 'name')
-                    ->options(User::all()->pluck('name', 'id'))
-                    ->default(Auth::user()->id)
-                    ->required(),
             ]);
     }
 
@@ -69,13 +107,27 @@ class PengumumanResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('referensi')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                // QueryBuilder::make()
+                //     ->constraints([
+                //         DateConstraint::make('created_at')
+                //     ]),
+                Filter::make('tanggal')
+                    ->form([
+                        DatePicker::make('from')->label('Dari Tanggal'),
+                        DatePicker::make('to')->label('Sampai Tanggal'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'], fn($q) => $q->where('tanggal', '>=', $data['from']))
+                            ->when($data['to'], fn($q) => $q->where('tanggal', '<=', $data['to']));
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

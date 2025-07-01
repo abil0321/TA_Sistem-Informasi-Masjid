@@ -15,7 +15,12 @@ class TransaksiKeuanganController extends Controller
      */
     public function index()
     {
-        $data = TransaksiKeuangan::all();
+        // $data = TransaksiKeuangan::all();
+        // return new TransaksiCollection($data);
+        $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
+        $data = TransaksiKeuangan::with(['donasi', 'kegiatan'])
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+            ->paginate($perPage);
         return new TransaksiCollection($data);
     }
     /**
@@ -32,5 +37,4 @@ class TransaksiKeuanganController extends Controller
             return new TransaksiResource($data);
         }
     }
-
 }

@@ -21,29 +21,33 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
-                    <a href={{ route('home') }} class="nav-item nav-link">Home</a>
-                    <a href={{ route('about') }} class="nav-item nav-link">About</a>
-                    <a href="{{ route('service') }}" class="nav-item nav-link">Services</a>
-                    <a href="{{ route('blog') }}" class="nav-item nav-link">Blogs</a>
-                    <a href="{{ route('contact') }}" class="nav-item nav-link">Contact Us</a>
-                    {{-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link active" data-bs-toggle="dropdown">
-                            <span class="dropdown-toggle">Pages</span>
+                    <a href="{{ route('home') }}"
+                        class="nav-item nav-link">Beranda</a>
+                    <a href="{{ route('tentang') }}"
+                        class="nav-item nav-link">Tentang</a>
+                    <a href="{{ route('galeri') }}"
+                        class="nav-item nav-link">Galeri</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link"
+                            data-bs-toggle="dropdown">
+                            <span class="dropdown-toggle">Laporan</span>
                         </a>
                         <div class="dropdown-menu m-0">
-                            <a href="#" class="dropdown-item">Our Features</a>
-                            <a href="#" class="dropdown-item">Our team</a>
-                            <a href="#" class="dropdown-item">Testimonial</a>
-                            <a href="#" class="dropdown-item">Our offer</a>
-                            <a href="#" class="dropdown-item">FAQs</a>
-                            <a href="#" class="dropdown-item active">404 Page</a>
+                            <a href="{{ route('transaksi-keuangan') }}" class="dropdown-item">Transaksi Keuangan</a>
+                            <a href="{{ route('pemasukan') }}" class="dropdown-item">Pemasukan</a>
+                            <a href="{{ route('pengeluaran') }}" class="dropdown-item">Pengeluaran</a>
                         </div>
-                    </div> --}}
+                    </div>
+                    <a href="{{ route('pengumuman') }}"
+                        class="nav-item nav-link">Pengumuman</a>
+                    <a href="{{ route('kontak') }}"
+                        class="nav-item nav-link">Kontak</a>
                 </div>
-                <a href="#" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0">Get
-                    Started</a>
+                <a href="#" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0">Donate
+                    Now!</a>
             </div>
         </nav>
+
 
         <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">

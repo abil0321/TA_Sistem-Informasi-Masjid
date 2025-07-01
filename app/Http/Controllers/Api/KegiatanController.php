@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Kegiatan\KegiatanCollection;
 use App\Http\Resources\Kegiatan\KegiatanResource;
 use App\Models\Kegiatan;
-use App\Models\TransaksiKeuangan;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +14,6 @@ class KegiatanController extends Controller
 {
     public function cek_token()
     {
-        //TODO: cek yang memiliki token siapa aja
         return request()->user();
     }
     /**
@@ -23,19 +21,17 @@ class KegiatanController extends Controller
      */
     public function index()
     {
-        //TODO: mengambil data (semuanya) dari database
-        $data = Kegiatan::with(['user'])->get();
-
-        //TODO: mengembalikan response status 200 (OK)
+        $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
+        $data = Kegiatan::with(['user', 'kategoriKegiatan'])
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+            ->paginate($perPage);
         return new KegiatanCollection($data);
     }
 
     public function store(Request $request)
     {
-        //TODO: Mengambil semua data dari request
         $data = $request->all();
 
-        //TODO: validasi data yang masuk
         $validator = Validator::make($data, [
             'nama_kegiatan' => 'required|string|max:255',
             'deskripsi' => 'required|string|min:5',
@@ -45,20 +41,11 @@ class KegiatanController extends Controller
             'jumlah' => 'required|integer|min:0',
         ]);
 
-        $lastBalance = $this->getLastBalance();
-        // Validasi saldo mencukupi
-        if ($lastBalance < $data['jumlah']) {
-            return response()->json([
-                'message' => 'Saldo tidak mencukupi, tolong kurangi pengeluarannya',
-            ], 400);
-        }
-
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors()
             ], 400);
         } else {
-            //TODO: lalu data di create/insert ke database by user yang sedang login
             $response = request()->user()->kegiatans()->create($data);
             return response()->json([
                 'message' => 'Data has been created',
@@ -69,10 +56,8 @@ class KegiatanController extends Controller
 
     public function show(string $id)
     {
-        //TODO: mengambil data berdasarkan id
         $data = Kegiatan::find($id);
 
-        //TODO: validasi jika data tidak ditemukan
         if (is_null($data)) {
             return response()->json([
                 'message' => 'Data not found'
@@ -87,11 +72,9 @@ class KegiatanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //TODO: melakukan try catch jika data tidak ditemukan
         try {
             $data = Kegiatan::findOrFail($id);
 
-            //TODO: mengambil semua data dari request lalu di update
             $data->update($request->all());
             return response()->json([
                 'message' => 'Data has been updated',
@@ -112,7 +95,6 @@ class KegiatanController extends Controller
         try {
             $data = Kegiatan::findOrFail($id);
 
-            //TODO: lalu data di delete/hapus di database by user yang sedang login
             $data->delete();
             return response()->json([
                 'message' => 'Data has been deleted'
@@ -122,11 +104,5 @@ class KegiatanController extends Controller
                 'message' => 'Data not found'
             ], 404);
         }
-    }
-
-    private function getLastBalance(): int
-    {
-        $lastTransaction = TransaksiKeuangan::latest()->first();
-        return $lastTransaction ? $lastTransaction->saldo : 0;
     }
 }
