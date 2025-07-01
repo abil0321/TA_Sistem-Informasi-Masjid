@@ -58,10 +58,10 @@ class PermissionSeeder extends Seeder
         }
 
         // Create roles and assign permissions (Removed jemaah role)
-        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole = Role::create(['name' => 'Admin']);
         $adminRole->givePermissionTo(Permission::all());
 
-        $pengurusRole = Role::create(['name' => 'pengurus']);
+        $pengurusRole = Role::create(['name' => 'Pengurus']);
         $pengurusRole->givePermissionTo([
             'donasi.view', 'donasi.create', 'donasi.edit', 'donasi.delete',
             'kegiatan.view', 'kegiatan.create', 'kegiatan.edit', 'kegiatan.delete',
@@ -75,7 +75,7 @@ class PermissionSeeder extends Seeder
             'email' => 'admin@masjid.com',
             'password' => 'admin123',
         ]);
-        $user->assignRole('admin');
+        $user->assignRole('Admin');
 
         // Create pengurus user
         $pengurus = User::factory()->create([
@@ -83,6 +83,6 @@ class PermissionSeeder extends Seeder
             'email' => 'pengurus@masjid.com',
             'password' => 'pengurus123',
         ]);
-        $pengurus->assignRole('pengurus');
+        $pengurus->assignRole('Pengurus');
     }
 }
