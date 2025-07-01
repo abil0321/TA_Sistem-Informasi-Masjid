@@ -36,7 +36,7 @@
             const pengeluaranList = document.getElementById('pengeluaran-list');
             loadingElement.classList.remove('d-none');
 
-            const url = `http://127.0.0.1:8000/api/kegiatan_api?page=${page}&per_page=${perPage}`;
+            const url = `https://masjid-muqorrobin.hostingphp.cloudapp.web.id/api/kegiatan_api?page=${page}&per_page=${perPage}`;
 
             console.log("Fetching data from: ", url); // Cek apakah URL benar
 

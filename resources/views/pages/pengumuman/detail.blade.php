@@ -38,7 +38,7 @@
             const pengumumanDetail = document.getElementById('pengumuman-detail');
             loadingElement.classList.remove('d-none');
 
-            const url = `http://127.0.0.1:8000/api/pengumuman_api/${id}`;
+            const url = `https://masjid-muqorrobin.hostingphp.cloudapp.web.id/api/pengumuman_api/${id}`;
 
             fetch(url)
                 .then(response => {
