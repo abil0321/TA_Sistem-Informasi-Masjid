@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\PermissionMiddleware as MiddlewarePermissionMiddleware;
+use App\Http\Middleware\RoleMiddleware as MiddlewareRoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,8 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-        'role' => RoleMiddleware::class,
-        'permission' => PermissionMiddleware::class,
+        'role' => MiddlewareRoleMiddleware::class,
+        'permission' => MiddlewarePermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
     ]);
     })
