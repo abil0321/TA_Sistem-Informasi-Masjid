@@ -40,10 +40,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cek_token_api', [AuthController::class, 'cek_token']);
     Route::post('/logout_api', [AuthController::class, 'logout']);
 
-    Route::apiResource('kegiatan_api', KegiatanController::class)->except(['index', 'show']);
-    Route::apiResource('pengumuman_api', PengumumanController::class)->except(['index', 'show']);
-    Route::apiResource('donasi_api', DonasiController::class)->except(['index']);
-    Route::apiResource('transaksi_api', TransaksiKeuanganController::class)->except(['index', 'show']);
+    Route::apiResource('kegiatan_api', KegiatanController::class);
+    Route::apiResource('pengumuman_api', PengumumanController::class);
+    Route::apiResource('donasi_api', DonasiController::class);
+    Route::apiResource('transaksi_api', TransaksiKeuanganController::class);
 
     Route::apiResource('kategori_pengumuman_api', KategoriPengumumanController::class);
     Route::apiResource('kategori_kegiatan_api', KategoriKegiatanController::class);
