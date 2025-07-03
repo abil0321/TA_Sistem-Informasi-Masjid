@@ -1,7 +1,7 @@
 project_name: Masjid Al-Muqorrabiin
 framework: laravel
 database:
-  name: masjidalmuqorrobin
+  name: masjidalmuqorrobin1
   user: masjidalmuqorrobin
   password: susah123
   host: localhost
@@ -12,7 +12,7 @@ commands:
   - "composer install --no-dev --optimize-autoloader"
   - "npm install"
   - "php artisan key:generate"
-  - "php artisan migrate:fresh --seed"
+  # - "php artisan migrate:fresh --seed"
   - "php artisan migrate --force"
   - "php artisan config:cache"
   - "php artisan route:cache"
