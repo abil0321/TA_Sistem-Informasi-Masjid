@@ -16,9 +16,11 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
         // Create permissions
         $permissions = [
+            'edit-settings',
+            'view-transaction',
+
             // User management
             'user.view',
             'user.create',
