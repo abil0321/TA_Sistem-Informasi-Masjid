@@ -20,6 +20,7 @@ class DonasiResource extends JsonResource
             'email' => $this->email,
             'no_telp' => $this->no_telp,
             'jumlah' => $this->jumlah,
+            'status' => $this->status,
             'tanggal' => $this->created_at->format('d M Y'),
             'user_id' => new UserResource($this->user),
         ];

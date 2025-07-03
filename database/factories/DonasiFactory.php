@@ -22,6 +22,7 @@ class DonasiFactory extends Factory
         'nama_donatur' => $this->faker->sentence(2),
         'email' => $this->faker->unique()->safeEmail,
         'no_telp'=> $this->faker->phoneNumber(),
+        'status' => $this->faker->randomElement(['DONE']),
         'jumlah' => $this->faker->numberBetween($int1 = 100000, $int2 = 1000000000),
         'transaksi_id'=> TransaksiKeuangan::factory(),
         'user_id'=> User::factory(),

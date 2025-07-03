@@ -18,9 +18,9 @@ class PengumumanController extends Controller
     public function index()
     {
         $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
-        $data = Pengumuman::with(['kategoriPengumuman', 'user'])
-            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
-            ->paginate($perPage);
+        $data = Pengumuman::with(['user'])
+                    ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+                    ->paginate($perPage);
         return new PengumumanCollection($data);
     }
 

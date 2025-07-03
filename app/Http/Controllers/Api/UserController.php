@@ -8,6 +8,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $data = User::all();
-        return new UserCollection($data);
+        return new  UserCollection($data);
 
     }
 
@@ -26,7 +27,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'no_telp' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        } else {
+            $response = User::create($data);
+            return response()->json([
+                'message' => 'Data has been created',
+                'data' => $response,
+            ], 201);
+        }
     }
 
     /**

@@ -17,28 +17,30 @@ class DonasiController extends Controller
      */
     public function index()
     {
-        $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
-        $data = Donasi::with(['user'])
-            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
-            ->paginate($perPage);
+        //TODO: mengambil data (semuanya) dari database
+        $data = Donasi::with(['user'])->get();
+
+        //TODO: mengembalikan response status 200 (OK)
         return new DonasiCollection($data);
     }
 
     public function store(Request $request)
     {
+        //TODO: Mengambil semua data dari request
         $data = $request->all();
 
-        // Set default value jika status tidak ada atau kosong
+         // Set default value jika status tidak ada atau kosong
         if (!isset($data['status']) || empty($data['status'])) {
-            $data['status'] = 'pending'; // atau nilai default lainnya
+            $data['status'] = 'DONE'; // atau nilai default lainnya
         }
 
+        //TODO: validasi data yang masuk
         $validator = Validator::make($data, [
             'nama_donatur' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:0',
             'email' => 'required|string',
             'no_telp' => 'required|string',
-            'status' => 'required|string',
+            'status' => 'string',
         ]);
 
         if ($validator->fails()) {
@@ -46,6 +48,7 @@ class DonasiController extends Controller
                 'error' => $validator->errors()
             ], 400);
         } else {
+            //TODO: lalu data di create/insert ke database by user yang sedang login
             $response = request()->user()->donaturs()->create($data);
             return response()->json([
                 'message' => 'Data has been created',
@@ -56,8 +59,10 @@ class DonasiController extends Controller
 
     public function show(string $id)
     {
+        //TODO: mengambil data berdasarkan id
         $data = Donasi::find($id);
 
+        //TODO: validasi jika data tidak ditemukan
         if (is_null($data)) {
             return response()->json([
                 'message' => 'Data not found'
@@ -72,9 +77,11 @@ class DonasiController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //TODO: melakukan try catch jika data tidak ditemukan
         try {
             $data = Donasi::findOrFail($id);
 
+            //TODO: mengambil semua data dari request lalu di update
             $data->update($request->all());
             return response()->json([
                 'message' => 'Data has been updated',
@@ -95,6 +102,7 @@ class DonasiController extends Controller
         try {
             $data = Donasi::findOrFail($id);
 
+            //TODO: lalu data di delete/hapus di database by user yang sedang login
             $data->delete();
             return response()->json([
                 'message' => 'Data has been deleted'
