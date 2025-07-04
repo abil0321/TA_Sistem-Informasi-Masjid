@@ -23,10 +23,16 @@ class KegiatanController extends Controller
      */
     public function index()
     {
-        //TODO: mengambil data (semuanya) dari database
-        $data = Kegiatan::with(['user'])->get();
+        // //TODO: mengambil data (semuanya) dari database
+        // $data = Kegiatan::with(['user'])->get();
 
-        //TODO: mengembalikan response status 200 (OK)
+        // //TODO: mengembalikan response status 200 (OK)
+        // return new KegiatanCollection($data);
+
+        $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
+        $data = Kegiatan::with(['user'])
+                    ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+                    ->paginate($perPage);
         return new KegiatanCollection($data);
     }
 
