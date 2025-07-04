@@ -1,7 +1,7 @@
 project_name: Masjid Al-Muqorrabiin
 framework: laravel
 database:
-  name: masjidalmuqorrobin1
+  name: masjidalmuqorrobin2
   user: masjidalmuqorrobin
   password: susah123
   host: localhost
