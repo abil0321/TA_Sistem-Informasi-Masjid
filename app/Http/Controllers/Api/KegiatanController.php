@@ -48,6 +48,7 @@ class KegiatanController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
             'lokasi' => 'required|string|max:255',
+            'kategori_kegiatan_id' => 'required|integer',
             'jumlah' => 'required|integer|min:0',
         ]);
 
