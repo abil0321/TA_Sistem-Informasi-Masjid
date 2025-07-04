@@ -17,10 +17,16 @@ class DonasiController extends Controller
      */
     public function index()
     {
-        //TODO: mengambil data (semuanya) dari database
-        $data = Donasi::with(['user'])->get();
+        // //TODO: mengambil data (semuanya) dari database
+        // $data = Donasi::with(['user'])->get();
 
-        //TODO: mengembalikan response status 200 (OK)
+        // //TODO: mengembalikan response status 200 (OK)
+        // return new DonasiCollection($data);
+
+        $perPage = $request->per_page ?? 8; // Jumlah data per halaman (default 5)
+        $data = Donasi::with(['user'])
+                    ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at secara descending
+                    ->paginate($perPage);
         return new DonasiCollection($data);
     }
 
