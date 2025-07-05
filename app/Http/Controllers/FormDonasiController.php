@@ -38,9 +38,10 @@ class FormDonasiController extends Controller
         ]);
 
         // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-qGin1e_8LpPnWFLw_UPhQHh-';
+        // \Midtrans\Config::$serverKey = config('midtrans.server_key');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
+        \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
@@ -73,7 +74,8 @@ class FormDonasiController extends Controller
     }
 
     public function callback(Request $request){
-        $serverKey = config('midtrans.server_key');
+        $serverKey = 'SB-Mid-server-qGin1e_8LpPnWFLw_UPhQHh-';
+        // $serverKey = config('midtrans.server_key');
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
         if($hashed == $request->signature_key){
             if($request->transaction_status == 'capture' or $request->transaction_status == 'settlement'){
